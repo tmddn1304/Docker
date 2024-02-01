@@ -1,18 +1,14 @@
-#gpt가 알려준 Dockerfile 
-# 베이스 이미지로 Maven과 JDK 17을 포함하는 이미지 사용
-FROM maven:3.8.4-openjdk-17
+# 기본 이미지 설정
+FROM python:3.9
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
-# 호스트 PC의 현재 디렉토리에 있는 프로젝트 파일을 이미지의 작업 디렉토리로 복사
-COPY . .
+# 현재 디렉토리의 파일들을 이미지의 작업 디렉토리로 복사
+COPY . /app
 
-# Maven을 사용하여 프로젝트 빌드
-RUN mvn clean package
+# 필요한 패키지 설치
+RUN pip install --no-cache-dir -r requirements.txt
 
-# 빌드된 JAR 파일의 위치를 찾기 위한 환경 변수 설정
-ENV JAR_FILE target/*.jar
-
-# 애플리케이션 실행 명령어 정의
-ENTRYPOINT ["sh","-c" ,"java -jar $JAR_FILE"]
+# 앱 실행
+CMD ["python", "test.py"]
